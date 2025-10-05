@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Mensile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            background: #008080;
+            padding: 10px;
+            font-size: 11px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #c0c0c0;
+            border: 2px outset #dfdfdf;
+            box-shadow: 2px 2px 0 #000;
+        }
+        
+        .title-bar {
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: white;
+            padding: 3px 5px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .title-bar-buttons {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .title-bar-button {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border: 1px outset #fff;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .content {
+            padding: 10px;
+        }
+        
+        .menu-bar {
+            background: #c0c0c0;
+            border-bottom: 1px solid #808080;
+            margin-bottom: 10px;
+        }
+        
+        .menu-bar button {
+            background: #c0c0c0;
+            border: none;
+            padding: 4px 8px;
+            margin: 2px;
+            cursor: pointer;
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            font-size: 11px;
+        }
+        
+        .menu-bar button:hover {
+            background: #000080;
+            color: white;
+        }
+        
+        h2 {
+            font-size: 13px;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 6px 12px;
+            cursor: pointer;
+            background: #c0c0c0;
+            border: 2px outset #dfdfdf;
+            font-size: 11px;
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            border-bottom: none;
+        }
+        
+        .tab.active {
+            background: #c0c0c0;
+            border: 2px inset #808080;
+        }
+        
+        .tab-content {
+            display: none;
+            border: 2px inset #808080;
+            padding: 10px;
+            background: white;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .panel {
+            border: 2px groove #808080;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #c0c0c0;
+        }
+        
+        .panel-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 11px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            background: white;
+            font-size: 11px;
+        }
+        
+        th {
+            background: #000080;
+            color: white;
+            padding: 4px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #808080;
+        }
+        
+        td {
+            padding: 4px;
+            border: 1px solid #808080;
+        }
+        
+        tr:nth-child(even) {
+            background: #f0f0f0;
+        }
+        
+        input[type="number"], input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 2px;
+            border: 2px inset #808080;
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            font-size: 11px;
+            background: white;
+        }
+        
+        input[type="file"] {
+            font-size: 11px;
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+        }
+        
+        .totale {
+            background: #c0c0c0;
+            font-weight: bold;
+        }
+        
+        button {
+            background: #c0c0c0;
+            border: 2px outset #dfdfdf;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            font-size: 11px;
+            margin: 2px;
+        }
+        
+        button:active {
+            border: 2px inset #808080;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-box {
+            border: 2px groove #808080;
+            padding: 8px;
+            background: white;
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            color: #808080;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .progress-container {
+            background: white;
+            border: 2px inset #808080;
+            height: 20px;
+            position: relative;
+            margin-top: 4px;
+        }
+        
+        .progress-bar {
+            background: #000080;
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: black;
+            mix-blend-mode: difference;
+            filter: invert(1);
+        }
+        
+        .form-group {
+            margin-bottom: 8px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 2px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .status-bar {
+            background: #c0c0c0;
+            border-top: 1px solid #fff;
+            padding: 2px 5px;
+            font-size: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .status-section {
+            border: 1px inset #808080;
+            padding: 1px 4px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 10px;
+            }
+            
+            th, td {
+                padding: 2px;
+            }
+            
+            .stat-value {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title-bar {
+                font-size: 10px;
+            }
+            
+            button {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            
+            input[type="number"], input[type="text"], input[type="date"], select {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-bar">
+            <span>Budget Mensile</span>
+            <div class="title-bar-buttons">
+                <div class="title-bar-button">_</div>
+                <div class="title-bar-button">□</div>
+                <div class="title-bar-button">X</div>
+            </div>
+        </div>
+        
+        <div class="menu-bar">
+            <button onclick="salvaFile()">Salva</button>
+            <button onclick="document.getElementById('file-input').click()">Carica</button>
+            <button onclick="azzeraDati()">Azzera Dati</button>
+            <input type="file" id="file-input" accept=".json" style="display:none" onchange="caricaFile(event)">
+        </div>
+        
+        <div class="content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('panoramica')">Panoramica</button>
+                <button class="tab" onclick="switchTab('spese')">Spese</button>
+                <button class="tab" onclick="switchTab('categorie')">Categorie</button>
+                <button class="tab" onclick="switchTab('obiettivi')">Obiettivi</button>
+            </div>
+            
+            <div id="panoramica" class="tab-content active">
+                <div class="panel">
+                    <div class="panel-title">Entrate Mensili</div>
+                    <table>
+                        <tr>
+                            <th>Descrizione</th>
+                            <th style="width: 120px">Importo</th>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="entrata1-desc" value="Stipendio"></td>
+                            <td><input type="number" id="entrata1" placeholder="0.00" step="0.01" oninput="calcola()"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="entrata2-desc" placeholder="Entrata extra"></td>
+                            <td><input type="number" id="entrata2" placeholder="0.00" step="0.01" oninput="calcola()"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="entrata3-desc" placeholder="Altra entrata"></td>
+                            <td><input type="number" id="entrata3" placeholder="0.00" step="0.01" oninput="calcola()"></td>
+                        </tr>
+                        <tr class="totale">
+                            <td>TOTALE ENTRATE</td>
+                            <td id="totale-entrate">0.00</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">SALDO DISPONIBILE</div>
+                        <div class="stat-value" id="saldo-disponibile">0.00</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">BUDGET TOTALE</div>
+                        <div class="stat-value" id="budget-totale-panoramica">0.00</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">COSTI GIORNALIERI</div>
+                        <div class="stat-value" id="costi-giornalieri-panoramica">0.00</div>
+                    </div>
+                </div>
+                
+                <h2>Riepilogo per Categoria</h2>
+                <table>
+                    <tr>
+                        <th>Categoria</th>
+                        <th>Budget</th>
+                        <th>Speso</th>
+                        <th>Residuo</th>
+                        <th style="width: 150px">Stato</th>
+                    </tr>
+                    <tr>
+                        <td>Carburante</td>
+                        <td id="pan-budget-carburante">0.00</td>
+                        <td id="pan-speso-carburante">0.00</td>
+                        <td id="pan-residuo-carburante">0.00</td>
+                        <td>
+                            <div class="progress-container">
+                                <div id="pan-progress-carburante" class="progress-bar" style="width: 0%"></div>
+                                <div class="progress-text" id="pan-perc-carburante">0%</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Abbigliamento</td>
+                        <td id="pan-budget-abbigliamento">0.00</td>
+                        <td id="pan-speso-abbigliamento">0.00</td>
+                        <td id="pan-residuo-abbigliamento">0.00</td>
+                        <td>
+                            <div class="progress-container">
+                                <div id="pan-progress-abbigliamento" class="progress-bar" style="width: 0%"></div>
+                                <div class="progress-text" id="pan-perc-abbigliamento">0%</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cibo/Drink</td>
+                        <td id="pan-budget-cibo">0.00</td>
+                        <td id="pan-speso-cibo">0.00</td>
+                        <td id="pan-residuo-cibo">0.00</td>
+                        <td>
+                            <div class="progress-container">
+                                <div id="pan-progress-cibo" class="progress-bar" style="width: 0%"></div>
+                                <div class="progress-text" id="pan-perc-cibo">0%</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Sport</td>
+                        <td id="pan-budget-sport">0.00</td>
+                        <td id="pan-speso-sport">0.00</td>
+                        <td id="pan-residuo-sport">0.00</td>
+                        <td>
+                            <div class="progress-container">
+                                <div id="pan-progress-sport" class="progress-bar" style="width: 0%"></div>
+                                <div class="progress-text" id="pan-perc-sport">0%</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Abbonamenti</td>
+                        <td id="pan-budget-abbonamenti">0.00</td>
+                        <td id="pan-speso-abbonamenti">0.00</td>
+                        <td id="pan-residuo-abbonamenti">0.00</td>
+                        <td>
+                            <div class="progress-container">
+                                <div id="pan-progress-abbonamenti" class="progress-bar" style="width: 0%"></div>
+                                <div class="progress-text" id="pan-perc-abbonamenti">0%</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Varie</td>
+                        <td id="pan-budget-varie">0.00</td>
+                        <td id="pan-speso-varie">0.00</td>
+                        <td id="pan-residuo-varie">0.00</td>
+                        <td>
+                            <div class="progress-container">
+                                <div id="pan-progress-varie" class="progress-bar" style="width: 0%"></div>
+                                <div class="progress-text" id="pan-perc-varie">0%</div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div id="spese" class="tab-content">
+                <div class="panel">
+                    <div class="panel-title">Aggiungi Spesa</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Data</label>
+                            <input type="date" id="nuova-data">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <select id="nuova-categoria">
+                                <option value="carburante">Carburante</option>
+                                <option value="abbigliamento">Abbigliamento</option>
+                                <option value="cibo">Cibo/Drink</option>
+                                <option value="sport">Sport</option>
+                                <option value="abbonamenti">Abbonamenti</option>
+                                <option value="varie">Varie</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Descrizione</label>
+                            <input type="text" id="nuova-descrizione" placeholder="Descrizione spesa">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Importo</label>
+                            <input type="number" id="nuova-importo" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+                    <button onclick="aggiungiSpesa()">Aggiungi</button>
+                </div>
+                
+                <h2>Elenco Spese</h2>
+                <div style="overflow-x: auto;">
+                    <table id="table-tutte-spese">
+                        <tr>
+                            <th>Data</th>
+                            <th>Categoria</th>
+                            <th>Descrizione</th>
+                            <th>Importo</th>
+                            <th style="width: 60px">Azioni</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="categorie" class="tab-content">
+                <h2>Gestione Budget per Categoria</h2>
+                
+                <div class="panel">
+                    <div class="panel-title">Carburante</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-carburante" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Abbigliamento</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-abbigliamento" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Cibo/Drink</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-cibo" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Sport</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-sport" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Abbonamenti</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-abbonamenti" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Varie</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-varie" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+            </div>
+            
+            <div id="obiettivi" class="tab-content">
+                <div class="panel">
+                    <div class="panel-title">Obiettivo Mensile di Risparmio</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Importo Obiettivo</label>
+                            <input type="number" id="obiettivo-mensile" placeholder="0.00" step="0.01" oninput="calcola()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Descrizione</label>
+                            <input type="text" id="obiettivo-desc" placeholder="Es: Fondo vacanze">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Risparmiato finora</label>
+                        <div class="stat-value" id="risparmio-attuale">0.00</div>
+                        <div class="progress-container">
+                            <div id="progress-obiettivo" class="progress-bar" style="width: 0%"></div>
+                            <div class="progress-text" id="perc-obiettivo">0%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2>Statistiche Risparmio</h2>
+                <table>
+                    <tr>
+                        <td>Entrate Totali</td>
+                        <td id="stat-entrate" style="text-align: right; font-weight: bold;">0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Budget Allocato</td>
+                        <td id="stat-budget" style="text-align: right; font-weight: bold;">0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Speso Effettivo</td>
+                        <td id="stat-speso" style="text-align: right; font-weight: bold;">0.00</td>
+                    </tr>
+                    <tr class="totale">
+                        <td>Risparmiato</td>
+                        <td id="stat-risparmiato" style="text-align: right; font-weight: bold;">0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Manca all'obiettivo</td>
+                        <td id="stat-mancante" style="text-align: right; font-weight: bold;">0.00</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-section" id="status-spese">Spese: 0</div>
+            <div class="status-section" id="status-ultimo-salvataggio">Ultimo salvataggio: Mai</div>
+        </div>
+    </div>
+    
+    <script>
+        const categorie = ['carburante', 'abbigliamento', 'cibo', 'sport', 'abbonamenti', 'varie'];
+        let spese = [];
+        let dati = {
+            entrate: {},
+            budget: {},
+            obiettivo: {},
+            spese: []
+        };
+        
+        function caricaDatiStorage() {
+            const stored = localStorage.getItem('budgetMensile');
+            if (stored) {
+                dati = JSON.parse(stored);
+                spese = dati.spese || [];
+                
+                document.getElementById('entrata1-desc').value = dati.entrate.desc1 || 'Stipendio';
+                document.getElementById('entrata1').value = dati.entrate.importo1 || '';
+                document.getElementById('entrata2-desc').value = dati.entrate.desc2 || '';
+                document.getElementById('entrata2').value = dati.entrate.importo2 || '';
+                document.getElementById('entrata3-desc').value = dati.entrate.desc3 || '';
+                document.getElementById('entrata3').value = dati.entrate.importo3 || '';
+                
+                categorie.forEach(cat => {
+                    if (dati.budget[cat]) {
+                        document.getElementById('budget-' + cat).value = dati.budget[cat];
+                    }
+                });
+                
+                document.getElementById('obiettivo-mensile').value = dati.obiettivo.importo || '';
+                document.getElementById('obiettivo-desc').value = dati.obiettivo.descrizione || '';
+                
+                aggiornaTabellaSpe();
+                aggiornaStatusBar();
+            }
+        }
+        
+        function salvaDatiStorage() {
+            dati.entrate = {
+                desc1: document.getElementById('entrata1-desc').value,
+                importo1: document.getElementById('entrata1').value,
+                desc2: document.getElementById('entrata2-desc').value,
+                importo2: document.getElementById('entrata2').value,
+                desc3: document.getElementById('entrata3-desc').value,
+                importo3: document.getElementById('entrata3').value
+            };
+            
+            dati.budget = {};
+            categorie.forEach(cat => {
+                dati.budget[cat] = document.getElementById('budget-' + cat).value;
+            });
+            
+            dati.obiettivo = {
+                importo: document.getElementById('obiettivo-mensile').value,
+                descrizione: document.getElementById('obiettivo-desc').value
+            };
+            
+            dati.spese = spese;
+            dati.ultimoSalvataggio = new Date().toISOString();
+            
+            localStorage.setItem('budgetMensile', JSON.stringify(dati));
+            aggiornaStatusBar();
+        }
+        
+        function aggiornaStatusBar() {
+            document.getElementById('status-spese').textContent = 'Spese: ' + spese.length;
+            if (dati.ultimoSalvataggio) {
+                const data = new Date(dati.ultimoSalvataggio);
+                document.getElementById('status-ultimo-salvataggio').textContent = 
+                    'Ultimo salvataggio: ' + data.toLocaleString('it-IT');
+            }
+        }
+        
+        function salvaFile() {
+            salvaDatiStorage();
+            const dataStr = JSON.stringify(dati, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'budget_mensile_' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function caricaFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        dati = JSON.parse(e.target.result);
+                        spese = dati.spese || [];
+                        
+                        document.getElementById('entrata1-desc').value = dati.entrate.desc1 || '';
+                        document.getElementById('entrata1').value = dati.entrate.importo1 || '';
+                        document.getElementById('entrata2-desc').value = dati.entrate.desc2 || '';
+                        document.getElementById('entrata2').value = dati.entrate.importo2 || '';
+                        document.getElementById('entrata3-desc').value = dati.entrate.desc3 || '';
+                        document.getElementById('entrata3').value = dati.entrate.importo3 || '';
+                        
+                        categorie.forEach(cat => {
+                            if (dati.budget[cat]) {
+                                document.getElementById('budget-' + cat).value = dati.budget[cat];
+                            }
+                        });
+                        
+                        document.getElementById('obiettivo-mensile').value = dati.obiettivo.importo || '';
+                        document.getElementById('obiettivo-desc').value = dati.obiettivo.descrizione || '';
+                        
+                        aggiornaTabellaSpe();
+                        calcola();
+                        salvaDatiStorage();
+                        alert('Dati caricati con successo');
+                    } catch (error) {
+                        alert('Errore nel caricamento del file');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+        
+        function azzeraDati() {
+            if (confirm('Vuoi davvero cancellare tutti i dati? Questa operazione non puo essere annullata.')) {
+                localStorage.removeItem('budgetMensile');
+                location.reload();
+            }
+        }
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+        
+        function aggiungiSpesa() {
+            const data = document.getElementById('nuova-data').value;
+            const categoria = document.getElementById('nuova-categoria').value;
+            const descrizione = document.getElementById('nuova-descrizione').value;
+            const importo = parseFloat(document.getElementById('nuova-importo').value) || 0;
+            
+            if (!data || !descrizione || importo <= 0) {
+                alert('Compila tutti i campi');
+                return;
+            }
+            
+            spese.push({ data, categoria, descrizione, importo });
+            
+            document.getElementById('nuova-data').value = new Date().toISOString().split('T')[0];
+            document.getElementById('nuova-descrizione').value = '';
+            document.getElementById('nuova-importo').value = '';
+            
+            aggiornaTabellaSpe();
+            calcola();
+            salvaDatiStorage();
+        }
+        
+        function aggiornaTabellaSpe() {
+            const table = document.getElementById('table-tutte-spese');
+            
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            
+            spese.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach((spesa, index) => {
+                const row = table.insertRow();
+                row.innerHTML = `
+                    <td>${new Date(spesa.data).toLocaleDateString('it-IT')}</td>
+                    <td>${spesa.categoria.charAt(0).toUpperCase() + spesa.categoria.slice(1)}</td>
+                    <td>${spesa.descrizione}</td>
+                    <td style="text-align: right;">${spesa.importo.toFixed(2)}</td>
+                    <td><button onclick="rimuoviSpesa(${index})">X</button></td>
+                `;
+            });
+        }
+        
+        function rimuoviSpesa(index) {
+            if (confirm('Eliminare questa spesa?')) {
+                spese.splice(index, 1);
+                aggiornaTabellaSpe();
+                calcola();
+                salvaDatiStorage();
+            }
+        }
+        
+        function calcolaSpesaCategoria(categoria) {
+            return spese
+                .filter(s => s.categoria === categoria)
+                .reduce((sum, s) => sum + s.importo, 0);
+        }
+        
+        function calcola() {
+            const entrata1 = parseFloat(document.getElementById('entrata1').value) || 0;
+            const entrata2 = parseFloat(document.getElementById('entrata2').value) || 0;
+            const entrata3 = parseFloat(document.getElementById('entrata3').value) || 0;
+            const totaleEntrate = entrata1 + entrata2 + entrata3;
+            
+            document.getElementById('totale-entrate').textContent = totaleEntrate.toFixed(2);
+            
+            let totaleBudget = 0;
+            let totaleSpeso = 0;
+            
+            categorie.forEach(cat => {
+                const budget = parseFloat(document.getElementById('budget-' + cat).value) || 0;
+                const speso = calcolaSpesaCategoria(cat);
+                const residuo = budget - speso;
+                const percentuale = budget > 0 ? (speso / budget * 100) : 0;
+                
+                totaleBudget += budget;
+                totaleSpeso += speso;
+                
+                document.getElementById('pan-budget-' + cat).textContent = budget.toFixed(2);
+                document.getElementById('pan-speso-' + cat).textContent = speso.toFixed(2);
+                document.getElementById('pan-residuo-' + cat).textContent = residuo.toFixed(2);
+                
+                const progressBar = document.getElementById('pan-progress-' + cat);
+                const percText = document.getElementById('pan-perc-' + cat);
+                progressBar.style.width = Math.min(percentuale, 100) + '%';
+                percText.textContent = Math.round(percentuale) + '%';
+            });
+            
+            const saldoDisponibile = totaleEntrate - totaleBudget - totaleSpeso;
+            
+            document.getElementById('saldo-disponibile').textContent = saldoDisponibile.toFixed(2);
+            document.getElementById('budget-totale-panoramica').textContent = totaleBudget.toFixed(2);
+            document.getElementById('costi-giornalieri-panoramica').textContent = totaleSpeso.toFixed(2);
+            
+            const risparmioEffettivo = totaleEntrate - totaleSpeso;
+            const obiettivoMensile = parseFloat(document.getElementById('obiettivo-mensile').value) || 0;
+            const percObiettivo = obiettivoMensile > 0 ? (risparmioEffettivo / obiettivoMensile * 100) : 0;
+            const mancante = obiettivoMensile - risparmioEffettivo;
+            
+            document.getElementById('risparmio-attuale').textContent = risparmioEffettivo.toFixed(2);
+            
+            const progressObiettivo = document.getElementById('progress-obiettivo');
+            const percObiettivoText = document.getElementById('perc-obiettivo');
+            progressObiettivo.style.width = Math.min(percObiettivo, 100) + '%';
+            percObiettivoText.textContent = Math.round(percObiettivo) + '%';
+            
+            document.getElementById('stat-entrate').textContent = totaleEntrate.toFixed(2);
+            document.getElementById('stat-budget').textContent = totaleBudget.toFixed(2);
+            document.getElementById('stat-speso').textContent = totaleSpeso.toFixed(2);
+            document.getElementById('stat-risparmiato').textContent = risparmioEffettivo.toFixed(2);
+            document.getElementById('stat-mancante').textContent = (mancante > 0 ? mancante.toFixed(2) : '0.00');
+            
+            salvaDatiStorage();
+        }
+        
+        window.onload = function() {
+            document.getElementById('nuova-data').value = new Date().toISOString().split('T')[0];
+            caricaDatiStorage();
+            calcola();
+        };
+    </script>
+</body>
+</html>
