@@ -2,7 +2,6 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <!-- Imposta zoom fisso per evitare zoom accidentale su input -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Budget Mensile</title>
     <style>
@@ -16,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f2f9f9;
             padding: 8px;
-            font-size: 14px; /* Aumentato per leggibilità mobile */
+            font-size: 14px;
             line-height: 1.4;
         }
         
@@ -173,7 +172,7 @@
             font-family: inherit;
             font-size: 14px;
             background: white;
-            min-height: 36px; /* Minimo per touch */
+            min-height: 36px;
         }
         
         input[type="file"] {
@@ -287,14 +286,12 @@
             white-space: nowrap;
         }
 
-        /* Tabelle responsive */
         .table-wrapper {
             overflow-x: auto;
             width: 100%;
             margin-bottom: 12px;
         }
 
-        /* Media Queries */
         @media (min-width: 769px) {
             .form-row {
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -448,7 +445,6 @@
                             <th>Residuo</th>
                             <th>Stato</th>
                         </tr>
-                        <!-- Righe della tabella rimangono identiche -->
                         <tr>
                             <td>Carburante</td>
                             <td id="pan-budget-carburante">0.00</td>
@@ -461,7 +457,54 @@
                                 </div>
                             </td>
                         </tr>
-                        <!-- ... altre righe ... -->
+                        <tr>
+                            <td>Abbigliamento</td>
+                            <td id="pan-budget-abbigliamento">0.00</td>
+                            <td id="pan-speso-abbigliamento">0.00</td>
+                            <td id="pan-residuo-abbigliamento">0.00</td>
+                            <td>
+                                <div class="progress-container">
+                                    <div id="pan-progress-abbigliamento" class="progress-bar" style="width: 0%"></div>
+                                    <div class="progress-text" id="pan-perc-abbigliamento">0%</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cibo/Drink</td>
+                            <td id="pan-budget-cibo">0.00</td>
+                            <td id="pan-speso-cibo">0.00</td>
+                            <td id="pan-residuo-cibo">0.00</td>
+                            <td>
+                                <div class="progress-container">
+                                    <div id="pan-progress-cibo" class="progress-bar" style="width: 0%"></div>
+                                    <div class="progress-text" id="pan-perc-cibo">0%</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sport</td>
+                            <td id="pan-budget-sport">0.00</td>
+                            <td id="pan-speso-sport">0.00</td>
+                            <td id="pan-residuo-sport">0.00</td>
+                            <td>
+                                <div class="progress-container">
+                                    <div id="pan-progress-sport" class="progress-bar" style="width: 0%"></div>
+                                    <div class="progress-text" id="pan-perc-sport">0%</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Abbonamenti</td>
+                            <td id="pan-budget-abbonamenti">0.00</td>
+                            <td id="pan-speso-abbonamenti">0.00</td>
+                            <td id="pan-residuo-abbonamenti">0.00</td>
+                            <td>
+                                <div class="progress-container">
+                                    <div id="pan-progress-abbonamenti" class="progress-bar" style="width: 0%"></div>
+                                    <div class="progress-text" id="pan-perc-abbonamenti">0%</div>
+                                </div>
+                            </td>
+                        </tr>
                         <tr>
                             <td>Varie</td>
                             <td id="pan-budget-varie">0.00</td>
@@ -527,7 +570,7 @@
             
             <div id="categorie" class="tab-content">
                 <h2>Gestione Budget per Categoria</h2>
-                <!-- Pannelli categoria rimangono identici, ma con padding adattato -->
+                
                 <div class="panel">
                     <div class="panel-title">Carburante</div>
                     <div class="form-group">
@@ -535,7 +578,39 @@
                         <input type="number" id="budget-carburante" placeholder="0.00" step="0.01" oninput="calcola()">
                     </div>
                 </div>
-                <!-- ... altri pannelli ... -->
+                
+                <div class="panel">
+                    <div class="panel-title">Abbigliamento</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-abbigliamento" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Cibo/Drink</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-cibo" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Sport</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-sport" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Abbonamenti</div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Mensile</label>
+                        <input type="number" id="budget-abbonamenti" placeholder="0.00" step="0.01" oninput="calcola()">
+                    </div>
+                </div>
+                
                 <div class="panel">
                     <div class="panel-title">Varie</div>
                     <div class="form-group">
@@ -746,7 +821,7 @@
             const importo = parseFloat(document.getElementById('nuova-importo').value) || 0;
             
             if (!data || !descrizione || importo <= 0) {
-                alert('Compila tutti i campi');
+                alert('Compila tutti i campi correttamente');
                 return;
             }
             
@@ -825,11 +900,12 @@
                 percText.textContent = Math.round(percentuale) + '%';
             });
             
-            const saldoDisponibile = totaleEntrate - totaleBudget - totaleSpeso;
+            const saldoDisponibile = totaleEntrate - totaleBudget;
+            const costiGiornalieri = totaleSpeso;
             
             document.getElementById('saldo-disponibile').textContent = saldoDisponibile.toFixed(2);
             document.getElementById('budget-totale-panoramica').textContent = totaleBudget.toFixed(2);
-            document.getElementById('costi-giornalieri-panoramica').textContent = totaleSpeso.toFixed(2);
+            document.getElementById('costi-giornalieri-panoramica').textContent = costiGiornalieri.toFixed(2);
             
             const risparmioEffettivo = totaleEntrate - totaleSpeso;
             const obiettivoMensile = parseFloat(document.getElementById('obiettivo-mensile').value) || 0;
